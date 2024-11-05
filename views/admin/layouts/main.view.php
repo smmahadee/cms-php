@@ -10,17 +10,12 @@
 <body>
     <header>
         <h1>
-            <a href="index.php">CMS Project</a>
+            <a href="index.php">CMS : Admin</a>
         </h1>
         <p>A custom-made CMS system</p>
-
-        <?php foreach($navPages AS $navPage) : ?>
-             <a href="index.php?<?php echo http_build_query(['page' => $navPage->slug]) ?>"><?= $navPage->title ?></a>
-        <?php endforeach; ?>
-        <a href="index.php?route=admin/pages">Go to Admin</a>
     </header>
     <main>
-        <?php echo $contents; ?>
+        <?php echo $contents ?>
     </main>
     <footer>
         <p></p>

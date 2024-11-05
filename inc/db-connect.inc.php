@@ -11,3 +11,5 @@ catch (PDOException $e) {
     die();
 }
 
+return $pdo;
+

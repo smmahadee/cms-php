@@ -5,11 +5,6 @@ namespace App\Admin\Controller;
 
 
 class AbstractAdminController {
-    public function __construct()
-    {
-        
-    }
-
     protected function render($view, $params)
     {
         extract($params);
