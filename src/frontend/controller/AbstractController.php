@@ -15,7 +15,7 @@ class AbstractController {
         extract($params);
 
         ob_start();
-        require __DIR__ . '/../../../views/' . $view . '.view.php';
+        require __DIR__ . '/../../../views/frontend/' . $view . '.view.php';
         $contents = ob_get_clean();
 
         $navPages = $this->pagesRepository->fetchNavigation();
@@ -24,6 +24,6 @@ class AbstractController {
     }
 
     protected function error404() {
-        $this->render('frontend/abstract/notFound', []);
+        $this->render('abstract/notFound', []);
     }
 }

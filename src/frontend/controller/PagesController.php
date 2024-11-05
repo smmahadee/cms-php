@@ -18,7 +18,7 @@ class PagesController extends AbstractController
             return $this->error404();
         }
 
-        $this->render('frontend/pages/index', [
+        $this->render('pages/index', [
             'page' => $data
         ]);
     }
