@@ -7,6 +7,7 @@ use App\Frontend\Controller\PagesController;
 use App\Repository\PagesRepository;
 use App\Repository\UsersRepository;
 use App\Support\Container;
+use App\Support\CsrfHelper;
 
 require __DIR__ . '/inc/all.inc.php';
 
@@ -31,8 +32,9 @@ $container->bind('notFoundController', function() use($container) {
 });
 
 $container->bind('pagesAdminController', function() use($container) {
+    $usersRepository = $container->get('usersRepository');
     $pagesRepository = $container->get('pagesRepository');
-    return new PagesAdminController($pagesRepository);
+    return new PagesAdminController($usersRepository, $pagesRepository);
 });
 
 $container->bind('usersRepository', function() use($container) {
@@ -44,6 +46,19 @@ $container->bind('loginAdminController', function()use($container) {
     $usersRepository = $container->get('usersRepository');
     return new LoginAdminController($usersRepository);
 });
+
+$container->bind('csrfHelper', function()use($container) {
+    return new CsrfHelper();
+});
+
+$csrfHelper = $container->get('csrfHelper');
+$csrfHelper->handle();
+
+function get_csrf_token() {
+    global $container;
+    $csrfHelper = $container->get('csrfHelper');
+    return $csrfHelper->generateToken();
+}
 
 $route = @(string) ($_GET['route'] ?? 'pages');
 
@@ -64,6 +79,10 @@ else if($route === 'admin/login') {
     $loginAdminController = $container->get('loginAdminController');
     $loginAdminController->login();
 }
+else if($route === 'admin/logout') {
+    $loginAdminController = $container->get('loginAdminController');
+    $loginAdminController->logout();
+}
 else if($route === 'admin/pages/create') {
     $usersRepository = $container->get('usersRepository');
     $usersRepository->ensureLoggedIn();
@@ -81,7 +100,7 @@ else if($route === 'admin/pages/delete') {
 else if ($route === 'admin/pages/edit') {
     $usersRepository = $container->get('usersRepository');
     $usersRepository->ensureLoggedIn();
-    
+
     $pagesAdminController = $container->get('pagesAdminController');
     $pagesAdminController->edit();
 }

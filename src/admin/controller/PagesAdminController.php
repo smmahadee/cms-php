@@ -3,11 +3,14 @@
 namespace App\Admin\Controller;
 
 use App\Repository\PagesRepository;
+use App\Repository\UsersRepository;
 
 class PagesAdminController extends AbstractAdminController
 {
 
-    public function __construct(private PagesRepository $pagesRepository) {}
+    public function __construct(UsersRepository $usersRepository, private PagesRepository $pagesRepository) {
+        parent::__construct($usersRepository);
+    }
 
     public function index()
     {

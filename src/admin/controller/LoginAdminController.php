@@ -6,7 +6,9 @@ use App\Repository\UsersRepository;
 
 class LoginAdminController extends AbstractAdminController {
 
-    public function __construct(private UsersRepository $usersRepository) {}
+    public function __construct( UsersRepository $usersRepository) {
+        parent::__construct($usersRepository);
+    }
 
     public function login() {
         $isLoggedIn = $this->usersRepository->isLoggedIn();
@@ -42,5 +44,13 @@ class LoginAdminController extends AbstractAdminController {
             'username' => $username ?? '',
             'errors' => $errors
         ]);
+    }
+
+    public function logout() {
+        $this->usersRepository->ensureSessoin();
+        session_unset();
+        session_destroy();
+        header('Location: index.php?route=admin/login');
+        exit;
     }
 }

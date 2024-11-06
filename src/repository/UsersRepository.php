@@ -8,6 +8,11 @@ class UsersRepository
 {
     public function __construct(private PDO $pdo) {}
 
+    public function ensureSessoin() {
+        if(!session_id()){
+            session_start();
+        }
+    }
     public function findUserByUsernameAndPassword($username, $password)
     {
         $stmt = $this->pdo->prepare('SELECT * FROM `users` WHERE `username` = :username');
@@ -18,7 +23,7 @@ class UsersRepository
         if ($user && password_verify($password, $user['password'])) {
 
             // GENERATE SESSION DATA
-            session_start();
+           $this->ensureSessoin();
             $_SESSION['adminUserId'] = $user['id'];
             session_regenerate_id();
 
@@ -29,7 +34,7 @@ class UsersRepository
     }
 
     public function isLoggedIn(){
-        session_start();
+       $this->ensureSessoin();
         return !empty($_SESSION['adminUserId']);
     }
 
